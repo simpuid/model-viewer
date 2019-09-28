@@ -22,13 +22,7 @@ public class ClientInput : MonoBehaviour
 
     public void OnClick()
     {
-        int port = defaultPort;
-        int.TryParse(portInput.text, out port);
-        string ip = ipInput.text;
-
-        Client.client?.Disconnect();
-        Client.client = new Telepathy.Client();
-        Client.client.Connect(ip, port);
+        Debug.Log("1");
         StartCoroutine(InitializeConnection());
     }
 
@@ -36,19 +30,41 @@ public class ClientInput : MonoBehaviour
 
     IEnumerator InitializeConnection()
     {
-        if (Client.client == null)
-            yield break;
-        while (Client.client.Connecting)
+        //while (Client.client.Connecting)
+        //{
+        //    yield return new WaitForEndOfFrame();
+        //}
+        //if (!Client.client.Connected)
+        //{
+        //    Error.ShowError(startScene, "Can't connect! Check config");
+        //}
+        //else
+        //{
+        //    SceneManager.LoadScene(nextScene);
+        //}
+        int port = defaultPort;
+        int.TryParse(portInput.text, out port);
+        string ip = ipInput.text;
+        Client.client?.Disconnect();
+        Client.client = new Telepathy.Client();
+        Client.client.Connect(ip, port);
+        Debug.Log("conn");
+
+        Telepathy.Message msg;
+        while (!Client.client.GetNextMessage(out msg))
         {
             yield return new WaitForEndOfFrame();
         }
-        if (!Client.client.Connected)
+        switch (msg.eventType)
         {
-            Error.ShowError(startScene, "Can't connect! Check config");
-        }
-        else
-        {
-            SceneManager.LoadScene(nextScene);
+            case Telepathy.EventType.Connected:
+                SceneManager.LoadScene(nextScene);
+                Debug.Log("connected");
+                yield break;
+            case Telepathy.EventType.Disconnected:
+                Error.ShowError(startScene, "Can't connect! Check config");
+                Debug.Log("dis");
+                yield break;
         }
     }
 }
