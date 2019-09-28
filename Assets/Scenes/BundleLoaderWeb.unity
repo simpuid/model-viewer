@@ -387,6 +387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextScene: Client
+  startScene: ClientInput
 --- !u!4 &1452450600
 Transform:
   m_ObjectHideFlags: 0

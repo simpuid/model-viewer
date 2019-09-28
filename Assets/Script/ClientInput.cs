@@ -22,8 +22,6 @@ public class ClientInput : MonoBehaviour
 
     public void OnClick()
     {
-        Debug.Log(ipInput.text);
-        Debug.Log(portInput.text);
         int port = defaultPort;
         int.TryParse(portInput.text, out port);
         string ip = ipInput.text;
@@ -34,37 +32,7 @@ public class ClientInput : MonoBehaviour
         StartCoroutine(InitializeConnection());
     }
 
-    private void Update()
-    {
-        if (Client.client == null)
-            return;
-        if (!Client.client.Connected)
-            return;
 
-        Telepathy.Message msg;
-        while (Client.client.GetNextMessage(out msg))
-        {
-            switch (msg.eventType)
-            {
-                case Telepathy.EventType.Connected:
-                    Debug.Log("Connected Event");
-                    Debug.Log(msg.connectionId + " Connected");
-                    break;
-
-                case Telepathy.EventType.Data:
-                    Debug.Log("Data Event");
-                    FileObject file = DataParser.DeserializeObject<FileObject>(msg.data);
-                    BundleLoaderWeb.fileObject = file;
-                    Debug.Log(file == null);
-                    SceneManager.LoadScene(nextScene);
-                    break;
-
-                case Telepathy.EventType.Disconnected:
-                    Error.ShowError(startScene, "Server Disconnected");
-                    break;
-            }
-        }
-    }
 
     IEnumerator InitializeConnection()
     {
@@ -78,6 +46,9 @@ public class ClientInput : MonoBehaviour
         {
             Error.ShowError(startScene, "Can't connect! Check config");
         }
-        Debug.Log("Client Connected");
+        else
+        {
+            SceneManager.LoadScene(nextScene);
+        }
     }
 }
