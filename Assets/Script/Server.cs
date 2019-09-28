@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Server : MonoBehaviour
 {
@@ -9,12 +10,25 @@ public class Server : MonoBehaviour
     public static Telepathy.Server server;
     public HashSet<int> connections;
     public int currentServerIndex;
+    public GameObject header;
+    public RectTransform panel;
+    private Text[] textArray;
+
+
 
     public void Awake()
     {
-        Debug.Log("lol");
         connections = new HashSet<int>();
         currentServerIndex = 0;
+        textArray = new Text[bundle.names.Length];
+        for (int i = 0;i < textArray.Length; i++)
+        {
+            GameObject head = Instantiate(header);
+            textArray[i] = head.GetComponent<Text>();
+            head.GetComponent<RectTransform>().SetParent(panel);
+            textArray[i].text = bundle.names[i];
+            head.GetComponent<RectTransform>().localScale = Vector3.one;
+        }
     }
 
     public void Update()
