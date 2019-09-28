@@ -515,7 +515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5f9608c701157e458a722787063f496, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clientScene: Client
+  nextScene: BundleLoaderWeb
   startScene: ClientInput
   defaultPort: 0
   ipInput: {fileID: 2094870459}

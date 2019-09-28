@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class Client : MonoBehaviour
 {
+    public static Bundle bundle;
     public static Telepathy.Client client;
 }
