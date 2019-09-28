@@ -10,6 +10,7 @@ public class FileReader
         if (text.Length == 0)
         {
             Debug.Log("Data file is empty.");
+            Error.ShowError(null, "Data file is Empty.");
             return null;
         }
         FileObject fileObject = new FileObject();

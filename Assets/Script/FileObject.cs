@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿
+[System.Serializable]
 public class FileObject
 {
     public string url;
