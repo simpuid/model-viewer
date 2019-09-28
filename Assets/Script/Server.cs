@@ -205,7 +205,8 @@ public class Server : MonoBehaviour
             objects[i].SetActive(i == currentServerIndex);
         }
         currentTransform = objects[currentServerIndex].GetComponent<Transform>();
-
+        currentPosition.visible = false;
+        hudPoint.Hide();
         byte[] data = DataParser.ObjecttoByteArray<SetModel>(model);
         foreach (int id in connections)
             server.Send(id, data);
