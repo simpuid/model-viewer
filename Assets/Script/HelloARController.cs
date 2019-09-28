@@ -59,6 +59,7 @@ namespace GoogleARCore.Examples.HelloAR
 
         public Transform pawnSingleton;
         public Anchor anchorSingleton = null;
+        public GameObject viewer;
 
         /// <summary>
         /// The rotation in degrees need to apply to prefab when it is placed.
@@ -128,7 +129,10 @@ namespace GoogleARCore.Examples.HelloAR
 
                     // Make game object a child of the anchor.
                     if (anchorSingleton != null)
+                    {
                         pawnSingleton.SetParent(anchorSingleton.transform);
+                        viewer.SetActive(true);
+                    }
                 }
             }
         }

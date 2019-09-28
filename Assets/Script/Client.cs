@@ -81,12 +81,13 @@ public class Client : MonoBehaviour
 
     private void process(SetModel setModel)
     {
+        viewer.gameObject.SetActive(true);
         Debug.Log("got SetModel");
         for (int i = 0;i < objects.Length;i++)
         {
             objects[i].SetActive(i == setModel.index);
         }
-        currentTransform = objects[setModel.index].GetComponent<Transform>();
+        currentTransform = objects[setModel.index].GetComponent<Transform>();hudPoint.Hide();
     }
 
     private void process(SetPosition setPosition)

@@ -169,7 +169,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &92284374
 Transform:
   m_ObjectHideFlags: 0
@@ -198,6 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scale: 0.3
   helloARContorller: {fileID: 235339182}
+  panAndZoom: {fileID: 1021616792}
 --- !u!1 &235339181
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,6 +237,7 @@ MonoBehaviour:
     type: 3}
   pawnSingleton: {fileID: 434873090}
   anchorSingleton: {fileID: 0}
+  viewer: {fileID: 92284373}
 --- !u!4 &235339183
 Transform:
   m_ObjectHideFlags: 0
@@ -273,7 +275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4293976417129340, guid: 8b604092cbb3d482da82845b61a6809b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 4293976417129340, guid: 8b604092cbb3d482da82845b61a6809b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -693,6 +695,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1021616791}
   - component: {fileID: 1021616790}
+  - component: {fileID: 1021616792}
   m_Layer: 0
   m_Name: Client
   m_TagString: Untagged
@@ -730,6 +733,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1021616792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021616789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1bc9290694c8484980193dc22a151d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistanceForTap: 40
+  maxDurationForTap: 0.4
+  useMouse: 1
+  mouseScrollSpeed: 2
+  controlCamera: 0
+  cam: {fileID: 0}
+  ignoreUI: 0
+  useBounds: 0
+  boundMinX: -150
+  boundMaxX: 150
+  boundMinY: -150
+  boundMaxY: 150
 --- !u!1 &1314203286
 GameObject:
   m_ObjectHideFlags: 0
