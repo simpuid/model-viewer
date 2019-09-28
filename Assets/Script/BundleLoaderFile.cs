@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class BundleLoaderFile : MonoBehaviour
 {
     public string bundleName;
     public string objectOrder;
+    public string nextScene;
 
     private void Awake()
     {
@@ -23,5 +25,6 @@ public class BundleLoaderFile : MonoBehaviour
             Error.ShowError(null, "Can't load file\n"+ Path.Combine(Application.dataPath, bundleName));
             yield break;
         }
+        SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
     }
 }
