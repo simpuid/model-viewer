@@ -12,17 +12,17 @@ public class Server : MonoBehaviour
 
     public void Awake()
     {
-        Application.runInBackground = true;
-
-        Telepathy.Logger.Log = Debug.Log;
-        Telepathy.Logger.LogWarning = Debug.LogWarning;
-        Telepathy.Logger.LogError = Debug.LogError;
+        Debug.Log("lol");
         connections = new HashSet<int>();
         currentServerIndex = 0;
     }
 
     public void Update()
     {
+        if (server == null)
+            return;
+        if (!server.Active)
+            return;
         Telepathy.Message msg;
         while (server.GetNextMessage(out msg))
         {
