@@ -91,12 +91,12 @@ public class Client : MonoBehaviour
 
     private void process(SetPosition setPosition)
     {
-        Debug.Log("got SetPosition");
+        Debug.Log("got SetPosition"+setPosition.visible.ToString());
         if (setPosition.visible)
             hudPoint.Show();
         else
             hudPoint.Hide();
-        localPos = new Vector3(localPos.x, localPos.y, localPos.z);
+        localPos = new Vector3(setPosition.x, setPosition.y, setPosition.z);
     }
 
     private void process(FileObject fileObject)

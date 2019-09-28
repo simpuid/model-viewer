@@ -135,7 +135,7 @@ public class Server : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hitPoint, Mathf.Infinity))
             {
-                currentPosition.visible = false;
+                currentPosition.visible = true;
                 Vector3 pos = currentTransform.InverseTransformPoint(hitPoint.point);
                 currentPosition.x = pos.x; currentPosition.y = pos.y; currentPosition.z = pos.z;
                 hudPoint.Show();
