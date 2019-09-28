@@ -8,7 +8,7 @@ public class ARViewer : MonoBehaviour
     public float scale;
     public HelloARController helloARContorller;
     private new Transform transform;
-    private PanAndZoom panAndZoom;
+    public PanAndZoom panAndZoom;
     private void Awake()
     {
         transform = GetComponent<Transform>();

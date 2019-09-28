@@ -300,8 +300,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d327418cd2647a4ba5695efb96f875c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bundleName: testbundle
-  objectOrder: order
+  bundleName: collection
+  objectOrder: order.txt
   nextScene: SocketServer
 --- !u!4 &798144758
 Transform:

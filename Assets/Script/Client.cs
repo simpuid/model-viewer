@@ -81,22 +81,23 @@ public class Client : MonoBehaviour
 
     private void process(SetModel setModel)
     {
+        viewer.gameObject.SetActive(true);
         Debug.Log("got SetModel");
         for (int i = 0;i < objects.Length;i++)
         {
             objects[i].SetActive(i == setModel.index);
         }
-        currentTransform = objects[setModel.index].GetComponent<Transform>();
+        currentTransform = objects[setModel.index].GetComponent<Transform>();hudPoint.Hide();
     }
 
     private void process(SetPosition setPosition)
     {
-        Debug.Log("got SetPosition");
+        Debug.Log("got SetPosition"+setPosition.visible.ToString());
         if (setPosition.visible)
             hudPoint.Show();
         else
             hudPoint.Hide();
-        localPos = new Vector3(localPos.x, localPos.y, localPos.z);
+        localPos = new Vector3(setPosition.x, setPosition.y, setPosition.z);
     }
 
     private void process(FileObject fileObject)

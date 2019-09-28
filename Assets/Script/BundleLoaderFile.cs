@@ -17,7 +17,7 @@ public class BundleLoaderFile : MonoBehaviour
 
     private IEnumerator Load(string bundleName,string orderFileName)
     {
-        string path = Application.persistentDataPath;
+        string path = Application.dataPath;
         AssetBundle bundle = AssetBundle.LoadFromFile(Path.Combine(path, bundleName));
         if (bundle == null)
         {
