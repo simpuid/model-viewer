@@ -15,5 +15,6 @@ public class BundleLoaderFile : MonoBehaviour
     private IEnumerator Load(string bundleName,string orderFileName)
     {
         yield return new WaitForEndOfFrame();
+        Error.ShowError(null, "Error");
     }
 }
