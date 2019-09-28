@@ -300,8 +300,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d327418cd2647a4ba5695efb96f875c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bundleName: bundle
+  bundleName: testbundle
   objectOrder: order
+  nextScene: Server
 --- !u!4 &798144758
 Transform:
   m_ObjectHideFlags: 0
