@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Server : MonoBehaviour
@@ -9,12 +8,18 @@ public class Server : MonoBehaviour
     public static Telepathy.Server server;
     public HashSet<int> connections;
     public int currentServerIndex;
+    public SetPosition currentPosition;
 
     public void Awake()
     {
         Debug.Log("lol");
         connections = new HashSet<int>();
         currentServerIndex = 0;
+        currentPosition = new SetPosition();
+        currentPosition.x = 0;
+        currentPosition.y = 0;
+        currentPosition.z = 0;
+        currentPosition.visible = false;
     }
 
     public void Update()
@@ -53,6 +58,8 @@ public class Server : MonoBehaviour
         model.index = currentServerIndex;
         byte[] firstData = DataParser.ObjecttoByteArray<SetModel>(model);
         server.Send(connectionID, firstData);
+        byte[] secondData = DataParser.ObjecttoByteArray<SetPosition>(currentPosition);
+        server.Send(connectionID, secondData);
     }
 
     public void changeModel(int index)
@@ -62,6 +69,17 @@ public class Server : MonoBehaviour
         model.index = currentServerIndex;
         byte[] data = DataParser.ObjecttoByteArray<SetModel>(model);
         foreach(int id in connections)
+            server.Send(id, data);
+    }
+
+    public void chamgePosition(float x, float y,float z,bool visible)
+    {
+        currentPosition.x = x;
+        currentPosition.y = y;
+        currentPosition.z = z;
+        currentPosition.visible = visible;
+        byte[] data = DataParser.ObjecttoByteArray<SetPosition>(currentPosition);
+        foreach (int id in connections)
             server.Send(id, data);
     }
 }

@@ -5,5 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class SetPosition
 {
-    float x, y, z;
+    public float x, y, z;
+    public bool visible;
 }
