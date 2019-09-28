@@ -15,6 +15,7 @@ public class SocketServer : MonoBehaviour
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
 
+        Server.server?.Stop();
         Server.server = new Telepathy.Server();
         Server.server.Start(port);
     }
