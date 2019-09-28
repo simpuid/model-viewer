@@ -6,13 +6,40 @@ using UnityEngine.SceneManagement;
 
 public class BundleLoaderWeb : MonoBehaviour
 {
-    public static FileObject fileObject;
-
     public string nextScene;
+    public string startScene;
+    bool receiveMessage = true;
 
-    private void Awake()
+    private void Update()
     {
-        StartCoroutine(Load(fileObject));
+        if (Client.client == null)
+            return;
+        if (!Client.client.Connected)
+            return;
+        if (!receiveMessage)
+            return;
+
+        Telepathy.Message msg;
+        while (receiveMessage && Client.client.GetNextMessage(out msg))
+        {
+            switch (msg.eventType)
+            {
+                case Telepathy.EventType.Connected:
+                    break;
+
+                case Telepathy.EventType.Data:
+                    FileObject file = DataParser.DeserializeObject<FileObject>(msg.data);
+                    if (file != null)
+                    {
+                        receiveMessage = false;
+                        StartCoroutine(Load(file));
+                    }
+                    break;
+                case Telepathy.EventType.Disconnected:
+                    Error.ShowError(startScene, "Server Disconnected");
+                    break;
+            }
+        }
     }
 
     private IEnumerator Load(FileObject file)
@@ -20,6 +47,11 @@ public class BundleLoaderWeb : MonoBehaviour
         UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(file.url, 0);
         yield return request.SendWebRequest();
         AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
+        if (bundle == null)
+        {
+            Error.ShowError(null, "Can't download bundle");
+            yield break;
+        }
         GameObject[] objects = new GameObject[file.names.Length];
         for (int i = 0; i < file.names.Length; i++)
         {
@@ -34,3 +66,4 @@ public class BundleLoaderWeb : MonoBehaviour
         SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
     }
 }
+
