@@ -6,4 +6,5 @@ public class Server : MonoBehaviour
 {
     public static Bundle bundle;
     public static FileObject fileObject;
+    public static Telepathy.Server server;
 }
