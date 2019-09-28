@@ -54,4 +54,14 @@ public class Server : MonoBehaviour
         byte[] firstData = DataParser.ObjecttoByteArray<SetModel>(model);
         server.Send(connectionID, firstData);
     }
+
+    public void changeModel(int index)
+    {
+        currentServerIndex = index;
+        SetModel model = new SetModel();
+        model.index = currentServerIndex;
+        byte[] data = DataParser.ObjecttoByteArray<SetModel>(model);
+        foreach(int id in connections)
+            server.Send(id, data);
+    }
 }
