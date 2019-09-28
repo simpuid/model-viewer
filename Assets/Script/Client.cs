@@ -7,17 +7,96 @@ public class Client : MonoBehaviour
     public static Bundle bundle;
     public static Telepathy.Client client;
     public string startScene;
+    public float requiredSize;
+    public HUDPoint hudPoint;
+    private Vector3 localPos;
+    private Transform currentTransform;
+
+    public Transform viewer;
+    GameObject[] objects;
+
+    private void DestroyCamera(Transform t)
+    {
+        Camera c = t.GetComponent<Camera>();
+        if (c != null)
+        {
+            Destroy(c);
+        }
+        for (int i = 0; i < t.childCount; i++)
+        {
+            DestroyCamera(t.GetChild(i));
+        }
+    }
+
+    private void CalculateBound(Transform t, ref Bounds bnd, ref bool set)
+    {
+        Renderer rnd = t.GetComponent<Renderer>();
+        if (rnd != null)
+        {
+            if (set)
+                bnd.Encapsulate(rnd.bounds);
+            else
+            {
+                bnd = rnd.bounds;
+                set = true;
+            }
+        }
+        for (int i = 0; i < t.childCount; i++)
+        {
+            CalculateBound(t.GetChild(i), ref bnd, ref set);
+        }
+    }
+
+    private Bounds CalculateBound(Transform t)
+    {
+        Bounds b = new Bounds();
+        bool set = false;
+        CalculateBound(t, ref b, ref set);
+        return b;
+    }
+
+    private void Awake()
+    {
+        objects = new GameObject[bundle.objects.Length];
+        for (int i = 0; i < objects.Length; i++)
+        {
+            GameObject model = Instantiate(bundle.objects[i]);
+            Transform t = model.GetComponent<Transform>();
+            t.SetParent(viewer);
+            t.localScale = Vector3.one;
+            t.localEulerAngles = Vector3.zero;
+            DestroyCamera(t);
+            objects[i] = model;
+            Bounds bound = CalculateBound(t);
+            float max = Mathf.Max(bound.size.x, bound.size.y, bound.size.z);
+            if (Mathf.Approximately(max, 0f))
+            {
+                max = requiredSize;
+            }
+            float scale = requiredSize / max;
+            t.localPosition = -bound.center * scale;
+            t.localScale = Vector3.one * scale;
+        }
+    }
 
     private void process(SetModel setModel)
     {
         Debug.Log("got SetModel");
-
+        for (int i = 0;i < objects.Length;i++)
+        {
+            objects[i].SetActive(i == setModel.index);
+        }
+        currentTransform = objects[setModel.index].GetComponent<Transform>();
     }
 
     private void process(SetPosition setPosition)
     {
         Debug.Log("got SetPosition");
-
+        if (setPosition.visible)
+            hudPoint.Show();
+        else
+            hudPoint.Hide();
+        localPos = new Vector3(localPos.x, localPos.y, localPos.z);
     }
 
     private void process(FileObject fileObject)
@@ -27,6 +106,10 @@ public class Client : MonoBehaviour
 
     private void Update()
     {
+        if (hudPoint.enable && currentTransform != null)
+        {
+            hudPoint.SetPoint(currentTransform.TransformPoint(localPos));
+        }
         if (client == null)
             return;
         if (!client.Connected)

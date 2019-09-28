@@ -18,7 +18,6 @@ public class CameraController : MonoBehaviour
     {
         z += Input.GetAxis("Zoom")*Time.deltaTime*speed;
         z = Mathf.Max(z, 1f);
-        Debug.Log(Input.GetAxis("Zoom"));
         camera.orthographicSize = z;
     }
 }

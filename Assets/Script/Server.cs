@@ -10,10 +10,12 @@ public class Server : MonoBehaviour
     public HashSet<int> connections;
     public int currentServerIndex;
     public SetPosition currentPosition;
+    public Transform currentTransform;
     public GameObject header;
     public RectTransform panel;
     public Transform viewer;
     public float requiredSize;
+    public HUDPoint hudPoint;
     private Text[] textArray;
     private GameObject[] objects;
 
@@ -24,13 +26,13 @@ public class Server : MonoBehaviour
         {
             Destroy(c);
         }
-        for (int i = 0;i < t.childCount; i++)
+        for (int i = 0; i < t.childCount; i++)
         {
             DestroyCamera(t.GetChild(i));
         }
     }
 
-    private void CalculateBound(Transform t,ref Bounds bnd,ref bool set)
+    private void CalculateBound(Transform t, ref Bounds bnd, ref bool set)
     {
         Renderer rnd = t.GetComponent<Renderer>();
         if (rnd != null)
@@ -45,7 +47,7 @@ public class Server : MonoBehaviour
         }
         for (int i = 0; i < t.childCount; i++)
         {
-            CalculateBound(t.GetChild(i),ref bnd,ref set);
+            CalculateBound(t.GetChild(i), ref bnd, ref set);
         }
     }
 
@@ -57,10 +59,24 @@ public class Server : MonoBehaviour
         return b;
     }
 
+    private void CreateMeshCollider(Transform t)
+    {
+        MeshFilter filter = t.GetComponent<MeshFilter>();
+        if (filter != null)
+        {
+            MeshCollider c = t.gameObject.AddComponent<MeshCollider>();
+            c.sharedMesh = filter.mesh;
+        }
+        for (int i = 0; i < t.childCount; i++)
+        {
+            CreateMeshCollider(t.GetChild(i));
+        }
+    }
+
     public void Awake()
     {
         connections = new HashSet<int>();
-        
+        hudPoint.Hide();
         currentPosition = new SetPosition();
         currentPosition.x = 0;
         currentPosition.y = 0;
@@ -88,16 +104,16 @@ public class Server : MonoBehaviour
             objects[i] = model;
 
             Bounds bound = CalculateBound(t);
-            
+
             float max = Mathf.Max(bound.size.x, bound.size.y, bound.size.z);
-            if (Mathf.Approximately(max,0f))
+            if (Mathf.Approximately(max, 0f))
             {
                 max = requiredSize;
             }
             float scale = requiredSize / max;
-            t.localPosition = -bound.center*scale;
+            t.localPosition = -bound.center * scale;
             t.localScale = Vector3.one * scale;
-
+            CreateMeshCollider(t);
         }
         changeModel(0);
     }
@@ -111,6 +127,30 @@ public class Server : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.PageDown))
         {
             changeModel(currentServerIndex + 1);
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hitPoint;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hitPoint, Mathf.Infinity))
+            {
+                currentPosition.visible = false;
+                Vector3 pos = currentTransform.InverseTransformPoint(hitPoint.point);
+                currentPosition.x = pos.x; currentPosition.y = pos.y; currentPosition.z = pos.z;
+                hudPoint.Show();
+            }
+            else
+            {
+                currentPosition.visible = false;
+                hudPoint.Hide();
+            }
+            changePosition(currentPosition.x, currentPosition.y, currentPosition.z, currentPosition.visible);
+        }
+
+        if (hudPoint.enable)
+        {
+            hudPoint.SetPoint(currentTransform.TransformPoint(new Vector3(currentPosition.x, currentPosition.y, currentPosition.z)));
         }
 
         if (server == null)
@@ -164,6 +204,7 @@ public class Server : MonoBehaviour
         {
             objects[i].SetActive(i == currentServerIndex);
         }
+        currentTransform = objects[currentServerIndex].GetComponent<Transform>();
 
         byte[] data = DataParser.ObjecttoByteArray<SetModel>(model);
         foreach (int id in connections)
