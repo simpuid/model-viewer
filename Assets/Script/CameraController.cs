@@ -7,16 +7,18 @@ public class CameraController : MonoBehaviour
     private new Transform transform;
     private float z;
     public float speed;
+    private new Camera camera;
     private void Awake()
     {
         transform = GetComponent<Transform>();
-        z = transform.position.z;
+        camera = GetComponent<Camera>();
+        z = camera.orthographicSize;
     }
     private void Update()
     {
         z += Input.GetAxis("Zoom")*Time.deltaTime*speed;
-        z = Mathf.Min(z, 0f);
+        z = Mathf.Max(z, 1f);
         Debug.Log(Input.GetAxis("Zoom"));
-        transform.position = new Vector3(0, 0, z);
+        camera.orthographicSize = z;
     }
 }
